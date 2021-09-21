@@ -16,3 +16,11 @@ backend-test-job:
     - apk add --no-cache docker-compose
   script:
     - docker-compose run --entrypoint "npm run unittest" backend
+
+frontend-test-job:
+  stage: test
+  before_script:
+    - cd frontend
+    - apk add --no-cache docker-compose
+  script:
+    - docker-compose run --entrypoint "npm run test" frontend
