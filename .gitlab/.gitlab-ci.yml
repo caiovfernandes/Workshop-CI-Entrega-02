@@ -3,11 +3,20 @@ image: docker
 services:
   - docker:dind
 
+
+variables:
+  DOCKER_ID: $docker_user
+  docker_password: $docker_password
+  PROJECT_NAME: $docker_user/erickgiffoni_gces_entrega02
+
+
 stages:
   - test
+  - deploy
 
 before_script:
   - echo 'testinh' 
+  - docker login -u "$DOCKER_ID" -p "$DOCKER_PASSWORD" $BACKEND_REPOSITORY
 
 backend-test-job:
   stage: test
@@ -24,3 +33,17 @@ frontend-test-job:
     - apk add --no-cache docker-compose
   script:
     - docker-compose run --entrypoint "npm run test" frontend
+
+deploy-front:
+  stage: deploy
+  script:
+    - docker build -f ./frontend/Dockerfile -t $FRONTEND_REPOSITORY:build ./frontend
+    - echo $DOCKER_PASSWORD | docker login -u $DOCKER_ID --password-stdin
+    - docker push $FRONTEND_REPOSITORY:build
+
+deploy-back:
+  stage: deploy
+  script:
+    - docker build -f ./backend/Dockerfile -t $BACKEND_REPOSITORY:build ./backend
+    - echo $DOCKER_PASSWORD | docker login -u $DOCKER_ID --password-stdin
+    - docker push $BACKEND_REPOSITORY:build
