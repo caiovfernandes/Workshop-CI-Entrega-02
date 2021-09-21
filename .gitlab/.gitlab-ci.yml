@@ -1,0 +1,13 @@
+image: docker
+
+services:
+  - docker
+
+before_script:
+  - echo 'testinh' 
+
+backend-tests:
+  image: docker/compose
+  stage: test
+  script:
+    - docker-compose run --entrypoint "npm run unittest" backend

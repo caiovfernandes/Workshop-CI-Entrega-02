@@ -1,7 +1,0 @@
-image: docker
-
-services:
-  - docker
-
-before_script:
-  - echo 'testinh'
