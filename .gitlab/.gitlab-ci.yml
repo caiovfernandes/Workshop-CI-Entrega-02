@@ -14,10 +14,6 @@ stages:
   - test
   - deploy
 
-before_script:
-  - echo 'testinh' 
-  - docker login -u "$DOCKER_ID" -p "$DOCKER_PASSWORD" $BACKEND_REPOSITORY
-
 backend-test-job:
   stage: test
   before_script:
